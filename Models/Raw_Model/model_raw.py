@@ -56,8 +56,8 @@ def remove_stop_words(text):
 
 def lemmatize(text):
     word_lemma = WordNetLemmatizer()
-    lemmatized_word = [word_lemma. lemmatize(word) for word in nltk.word_tokenize(text)]
-    return "".join(lemmatized_word)
+    lemmatized_word = [word_lemma.lemmatize(word) for word in nltk.word_tokenize(text)]
+    return " ".join(lemmatized_word)
 
 
 def pre_process(text):
@@ -73,7 +73,3 @@ def pre_process(text):
         for i in word_tokens:
             word_list.append(i)
     return word_tokens
-
-
-
-
