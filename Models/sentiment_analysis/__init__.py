@@ -7,24 +7,26 @@ from googletrans import Translator
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 from .stockanalysis import StockAnalysis
+from .filtering import filter_on_stock_change_and_compound
 
 
-
-
-
-csv_file = Path('../../Data/test/stock-change-title-nov12.csv')
-analysis_csv_file = csv_file.parent / 'analysis-stock-change-5.csv'
+csv_file = Path(__file__).parent.parent / '../Data/test/stock-change-title-nov12.csv'
+analysis_csv_file = csv_file.parent / 'analysis-stock-change-5-quoted.csv'
+filtered_csv_file = analysis_csv_file.parent / f'{analysis_csv_file.stem}-filtered.csv'
 
 
 def main():
+    filter_on_stock_change_and_compound(analysis_csv_file, filtered_csv_file)
+
+
+def init():
     max_limit: int = 10
     row_number = 1
     results: t.List[StockAnalysis] = []
     detector = Translator()
     # Google translation allows for 5 calls/s and maximum 200k per day.
     use_lang_detection = False
-
-    with csv_file.open('r', encoding='utf-8') as f:
+    with csv_file.open('r', encoding='utf-8', newline='') as f:
         csv_reader = csv.reader(f, delimiter=',')
         print(
             'Filtering on Swedish press releases where stock change is ±5% or'
