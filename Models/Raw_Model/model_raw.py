@@ -1,4 +1,4 @@
-from Settings.setings import *
+from Settings.settings import *
 
 
 def sentence_tokenize(text):
@@ -38,8 +38,8 @@ def remove_numbers(text):
     take strings input and return a clean text without numbers.
     use regex to discard the numbers.
     """
-    output = " ".join(c for c in text if not c.isdigit())
-    return output
+    return " ".join(c for c in text if not c.isdigit())
+
 
 
 def remove_punctuation(text):
