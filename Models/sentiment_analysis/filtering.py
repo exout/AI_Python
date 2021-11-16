@@ -17,10 +17,6 @@ def filter_on_stock_change_and_compound(source_file: Path, target_file: Path):
                 quotechar='|',
             )
             for data in source_reader:
-                data = {
-                    key: float(value) if is_numeric(value) else value
-                    for key, value in data.items()
-                }
                 result = StockAnalysis(**data)
                 if is_true_positive(result) or is_true_negative(result):
                     target.write(str(result))
@@ -40,8 +36,3 @@ def is_true_negative(result: StockAnalysis) -> bool:
     True negative means that both stock change and compound is negative.
     """
     return result.stock_change < 0 and result.compound < -0.2
-
-
-def is_numeric(value: str) -> bool:
-    """Check if value is numeric."""
-    return value.replace('-', '').replace('.', '').isnumeric()
