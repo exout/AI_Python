@@ -1,13 +1,13 @@
 import typing as t
-from dataclasses import dataclass
+
+from pydantic import BaseModel, validator
 
 
-@dataclass
-class StockAnalysis:
+class StockAnalysis(BaseModel):
     """Result of stock press release sentiment analysis."""
 
     text: str
-    stock_change: float
+    stock_change: t.Optional[float] = None
     compound: float
     neg: float
     neu: float
@@ -36,18 +36,34 @@ class StockAnalysis:
             f'{self.neu},{self.pos}\n'
         )
 
-    @staticmethod
-    def get_stock_change(string: str) -> float:
-        """Get stock change as float from string."""
-        string = string.replace(',', '.')
+    @validator('stock_change', pre=True)
+    def validate_stock_change(cls, value: t.Union[float, str]) -> t.Optional[float]:
+        return convert_stock_change(value)
+
+    @classmethod
+    def csv_header(cls) -> str:
+        """Get CSV header."""
+        titles = StockAnalysis.schema().get('required').copy()
+        titles.insert(1, 'stock_change')
+        return f"{','.join(titles)}\n"
+
+
+def convert_stock_change(value: t.Union[str, float]):
+    """Convert stock change to float."""
+    if isinstance(value, str):
+        if not value:
+            return None
+        result = value.replace(',', '.')
         # Exclude sign and % when converting to float.
-        result = float(string[1:-1])
-        if string.startswith('-'):
+        result = float(result[1:-1])
+        if value.startswith('-'):
             # Result must be negative.
             result *= -1
         return result
+    return value
 
-    @staticmethod
-    def csv_header() -> str:
-        """Get CSV header."""
-        return 'text,stock_change,compound,neg,neu,pos\n'
+
+if __name__ == '__main__':
+    obj = StockAnalysis(text='abc', stock_change='+3,5%', compound=0.3, neg=0.1, neu=1, pos=0.5)
+    print(obj)
+    print(StockAnalysis.csv_header())
