@@ -41,7 +41,6 @@ def remove_numbers(text):
     return " ".join(c for c in text if not c.isdigit())
 
 
-
 def remove_punctuation(text):
     return " ".join(c for c in text if c not in punctuation)
 
