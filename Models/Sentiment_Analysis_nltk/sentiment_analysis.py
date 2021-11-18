@@ -35,7 +35,6 @@ if len(new_date_list) != df.shape[0]:
 else:
     df['New Date'] = new_date_list  # add the list to our original dataframe the
 
-
 results = []
 sia = SIA()
 for lines in df['Title']:
@@ -43,35 +42,27 @@ for lines in df['Title']:
     score['Headline'] = lines  # add headlines for viewing
     results.append(score)
 
-
 df['Score'] = pd.DataFrame(results)['compound']
 
 # creates a daily score by summing the scores of the individual articles in each day
-
 df1 = df.groupby(['New Date']).sum()
 df_price['Date'] = df_price['Date'].astype('datetime64[ns]')
 df_price1 = df_price.drop(['Open', 'High', 'Low', 'Close', 'Volume'], axis=1)  # drop unwanted rows
 df_price1.set_index('Date', inplace=True)  # set Date column as index
 
-
 # Now i have the prices, i need to calculate the returns.
 df_price1['Returns'] = df_price1['Adj Close'] / df_price1['Adj Close'].shift(1) - 1  # Calculate daily returns
 
-# Check relationship between lagged score against returns (daily)
-
 # Lagged the sentiment score
 df1['Score(1)'] = df1.shift(1)
-
 
 # Match the daily returns with the lagged sentiment score
 dfReturnsScore = pd.merge(df_price1[['Returns']], df1[['Score(1)']], left_index=True, right_index=True, how='left')
 
 # Clean the data (again)
-
 dfReturnsScore.fillna(0, inplace=True)  # replace NaN with 0 permanently
 dfReturnsScore.plot(x="Score(1)", y="Returns", style="o")
 plt.show()
-
 
 # Design the test and Test for predictive value
 
@@ -84,30 +75,3 @@ dfReturnsScore2.plot(x="Score(1)", y="Returns", style="o")
 final = dfReturnsScore2['Returns'].corr(dfReturnsScore2['Score(1)'])
 print(f'The final result of this correlation is {final} -->>')
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
