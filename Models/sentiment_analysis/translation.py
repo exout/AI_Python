@@ -13,7 +13,7 @@ def get_detected_lang(text: str) -> t.Optional[str]:
     """Use Google Translate API to detect language."""
     translator = Translator()
     try:
-        time.sleep(0.5)
+        time.sleep(0.3)
         return translator.detect(text).lang
     except Exception as e:
         # (Probably) invoked API rate limit

@@ -5,7 +5,7 @@ from .stockanalysis import StockAnalysis
 
 
 def filter_on_stock_change_and_compound(source_file: Path, target_file: Path):
-    """Exclude results where stock change and compound correlate."""
+    """Exclude results where stock change and compound don't correlate."""
     if target_file.exists():
         raise FileExistsError
     with source_file.open('r', encoding='utf-8', newline='') as source:
