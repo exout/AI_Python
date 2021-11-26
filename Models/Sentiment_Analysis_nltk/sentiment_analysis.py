@@ -61,7 +61,7 @@ dfReturnsScore = pd.merge(df_price1[['Returns']], df1[['Score(1)']], left_index=
 
 # Clean the data (again)
 dfReturnsScore.fillna(0, inplace=True)  # replace NaN with 0 permanently
-dfReturnsScore.plot(x="Score(1)", y="Returns", style="o")
+dfReturnsScore.plot(x="Score(1)", y="Returns", style=".")
 plt.show()
 
 # Design the test and Test for predictive value
@@ -69,9 +69,9 @@ plt.show()
 dfReturnsScore2 = dfReturnsScore[(dfReturnsScore['Score(1)'] > 0.5) |
                                  (dfReturnsScore['Score(1)'] < -0.5)]
 
-dfReturnsScore2.plot(x="Score(1)", y="Returns", style="o")
+dfReturnsScore2.plot(x="Score(1)", y="Returns", style=".")
 
 
 final = dfReturnsScore2['Returns'].corr(dfReturnsScore2['Score(1)'])
-print(f'The final result of this correlation is {final} -->>')
+print(f'The final result of this correlation is -->> {final}')
 plt.show()
